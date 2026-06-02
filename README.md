@@ -6,7 +6,7 @@ This repository contains the Group 1 work for the AURA Accessibility Simulator a
 ## Project Structure
 
 * `Hlib/` - Hlib's version of the project
-* `Ilyas/` - Ilyas's version of the project
+* `Elias/` - Elias's version of the project
 
 Each group member works in their own folder to avoid conflicts and keep the work separated.
 
