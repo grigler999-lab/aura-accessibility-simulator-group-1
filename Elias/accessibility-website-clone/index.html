@@ -634,11 +634,12 @@
 
         /* 
         LOW VISION MODE HEADLINE CHANGE
-        When low vision profile is selected with clarify mode,
+        When low vision profile is selected with simulation AND clarify mode,
         the headline changes to "The Guardian for everyone."
         with gold text instead of purple gradient.
+        This only applies when simulation is active.
         */
-        body.clarify-active.low-vision-active .headline .gradient-text {
+        body.simulation-active.clarify-active.low-vision-active .headline .gradient-text {
             background: var(--accent-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -647,14 +648,38 @@
 
         /* 
         RESPONSIVE TEXT FOR LOW VISION
-        In low vision + clarify mode, we show alternative
-        headline text that's more direct.
+        In low vision + simulation + clarify mode, we show alternative
+        headline text that's more direct. Only when simulation is running.
         */
         .headline-default { display: inline; }
         .headline-lowvision { display: none; }
 
-        body.clarify-active.low-vision-active .headline-default { display: none; }
-        body.clarify-active.low-vision-active .headline-lowvision { display: inline; }
+        body.simulation-active.clarify-active.low-vision-active .headline-default { display: none; }
+        body.simulation-active.clarify-active.low-vision-active .headline-lowvision { display: inline; }
+
+        /* 
+        =====================================================
+        CLARIFY CONTENT STANDALONE MODE (NO SIMULATION)
+        =====================================================
+        When clarify content is active WITHOUT simulation,
+        it increases text size and improves readability
+        but does NOT show annotation boxes.
+        */
+        body.clarify-active:not(.simulation-active) {
+            font-size: 110%;
+        }
+
+        body.clarify-active:not(.simulation-active) .headline {
+            font-size: 80px;
+        }
+
+        body.clarify-active:not(.simulation-active) .description {
+            font-size: 20px;
+        }
+
+        body.clarify-active:not(.simulation-active) .feature-description {
+            font-size: 17px;
+        }
 
         /* 
         =====================================================
@@ -678,6 +703,10 @@
             .headline {
                 font-size: 48px;
             }
+
+            body.clarify-active:not(.simulation-active) .headline {
+                font-size: 54px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -698,6 +727,10 @@
 
             .button-group {
                 flex-direction: column;
+            }
+
+            body.clarify-active:not(.simulation-active) .headline {
+                font-size: 40px;
             }
         }
     </style>
