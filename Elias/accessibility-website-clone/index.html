@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 
+    =====================================================
+    DOCUMENT HEAD SECTION
+    =====================================================
+    This section contains meta information, the page title,
+    and all CSS styles for the website.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura - The Guardian of Accessibility</title>
+    
+    <!-- 
+    =====================================================
+    GOOGLE FONTS IMPORT
+    =====================================================
+    We import the Inter font family which is used throughout
+    the website for a clean, modern look.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 
+        =====================================================
+        CSS CUSTOM PROPERTIES (VARIABLES)
+        =====================================================
+        These variables define the color scheme and can be
+        easily modified to change the entire site's appearance.
+        - Primary colors: Blues and purples for the main theme
+        - Accent colors: Gold/yellow for the "Clarify Content" mode
+        */
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #0f1629;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-gold: #f59e0b;
+            --border-color: #1e293b;
+            --button-bg: #1e293b;
+            --button-hover: #2d3a4f;
+        }
+
+        /* 
+        =====================================================
+        CSS RESET & BASE STYLES
+        =====================================================
+        Resets default browser styles and sets up the base
+        font family and background color for the entire page.
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* 
+        =====================================================
+        NAVIGATION BAR STYLES
+        =====================================================
+        The navigation bar is fixed at the top and contains:
+        - The AURA logo on the left
+        - Control buttons on the right (profile selector, 
+          simulate button, clarify toggle)
+        */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: var(--bg-primary);
+            position: relative;
+            z-index: 100;
+        }
+
+        /* 
+        LOGO STYLES
+        The logo uses letter-spacing to create the spaced-out
+        "A U R A" effect seen in the design.
+        */
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: var(--text-primary);
+        }
+
+        /* 
+        NAVIGATION CONTROLS CONTAINER
+        Uses flexbox to align all control buttons horizontally
+        with consistent spacing between them.
+        */
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* 
+        =====================================================
+        DROPDOWN SELECT STYLES
+        =====================================================
+        This is the profile selector dropdown that lets users
+        choose between different accessibility profiles:
+        - The Voyager (Color Blind)
+        - The Beacon (Low Vision)
+        */
+        .profile-select {
+            background: var(--button-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 12px 40px 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            min-width: 220px;
+        }
+
+        .profile-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        /* 
+        =====================================================
+        BUTTON STYLES
+        =====================================================
+        Base button styles used for both the "Simulate" button
+        and general action buttons throughout the page.
+        */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* 
+        PRIMARY BUTTON STYLE
+        Blue background button used for the main CTA
+        "Download for Windows" button.
+        */
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        /* 
+        SECONDARY/OUTLINE BUTTON STYLE
+        Transparent background with border, used for
+        secondary actions like "Watch the Vision".
+        */
+        .btn-secondary {
+            background: var(--button-bg);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--button-hover);
+        }
+
+        /* 
+        SIMULATE BUTTON SPECIAL STATE
+        When simulation is active, the button turns red
+        and shows "Stop Enforcement" text.
+        */
+        .btn-simulate.active {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: white;
+        }
+
+        /* 
+        =====================================================
+        TOGGLE SWITCH STYLES
+        =====================================================
+        Custom toggle switch for the "Clarify Content" feature.
+        Uses CSS pseudo-elements to create the switch appearance.
+        */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--button-bg);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #374151;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        /* 
+        TOGGLE SWITCH KNOB
+        The circular knob that moves left/right when toggled.
+        Uses transform to animate the position change.
+        */
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        /* 
+        ACTIVE STATE FOR TOGGLE
+        When active, the background turns green and the
+        knob slides to the right side.
+        */
+        .toggle-switch.active {
+            background: #22c55e;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* 
+        =====================================================
+        MAIN CONTENT SECTION STYLES
+        =====================================================
+        The main hero section containing the headline,
+        description, and call-to-action buttons.
+        */
+        .main-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 
+        VERSION BADGE
+        Small pill-shaped badge showing "Aura Enforcer | Alpha 0.1"
+        */
+        .version-badge {
+            display: inline-block;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--accent-blue);
+            margin-bottom: 40px;
+        }
+
+        /* 
+        =====================================================
+        HERO SECTION LAYOUT
+        =====================================================
+        Uses CSS Grid to create a two-column layout:
+        - Left column: Headline, description, buttons
+        - Right column: Status card
+        */
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 60px;
+            align-items: start;
+        }
+
+        /* 
+        MAIN HEADLINE STYLES
+        Large, bold headline with gradient text effect.
+        The gradient goes from white to purple/blue.
+        */
+        .headline {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+        }
+
+        /* 
+        GRADIENT TEXT EFFECT
+        Uses background-clip to apply a gradient color
+        to specific words in the headline.
+        */
+        .gradient-text {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 
+        DESCRIPTION PARAGRAPH
+        Lighter colored text below the headline explaining
+        what Aura does.
+        */
+        .description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        /* 
+        BUTTON GROUP
+        Container for the two CTA buttons, displayed
+        horizontally with a gap between them.
+        */
+        .button-group {
+            display: flex;
+            gap: 16px;
+        }
+
+        /* 
+        =====================================================
+        STATUS CARD STYLES
+        =====================================================
+        The floating card on the right showing current
+        scanning status (Notepad.exe, fixes applied, etc.)
+        */
+        .status-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 100px;
+        }
+
+        .status-item {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .status-label {
+            color: var(--text-secondary);
+        }
+
+        .status-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* 
+        =====================================================
+        FEATURES SECTION STYLES
+        =====================================================
+        The "Universal Empowerment" section with three
+        feature cards displayed in a grid.
+        */
+        .features-section {
+            padding: 80px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        /* 
+        FEATURE CARDS GRID
+        Three equal-width columns for the feature cards.
+        */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        /* 
+        INDIVIDUAL FEATURE CARD
+        Each card has a dark background, border, and
+        contains a title and description.
+        */
+        .feature-card {
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* 
+        =====================================================
+        FOOTER STYLES
+        =====================================================
+        Simple centered footer with copyright information.
+        */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* 
+        =====================================================
+        ACCESSIBILITY OVERLAY STYLES
+        =====================================================
+        These styles are used when "Simulate Aura Enforcer"
+        is active. They add colored borders and labels
+        around different types of elements to show what
+        the Aura tool would identify and enhance.
+        */
+        
+        /* 
+        BASE ANNOTATION BOX
+        The outer wrapper that contains both the label
+        and the highlighted element.
+        */
+        .annotation-box {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* 
+        ANNOTATION LABEL
+        Small tag above elements showing their type:
+        - STRUCTURE (for headings, sections)
+        - INTERACTION (for buttons, links)
+        - UI ELEMENT (for cards, widgets)
+        - CONTENT BOX (for text containers)
+        */
+        .annotation-label {
+            position: absolute;
+            top: -24px;
+            left: 0;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 10;
+            display: none;
+        }
+
+        /* 
+        ANNOTATION SUBLABEL
+        Additional descriptive text shown below elements
+        like "Readable", "Optimized", "Target Boosted", "Semantic"
+        */
+        .annotation-sublabel {
+            position: absolute;
+            bottom: -20px;
+            right: 0;
+            font-size: 10px;
+            font-weight: 500;
+            display: none;
+        }
+
+        /* 
+        =====================================================
+        SIMULATION MODE STYLES
+        =====================================================
+        When simulation is active (body has 'simulation-active' class),
+        these styles show the annotation boxes and apply
+        blue borders around elements.
+        */
+        body.simulation-active .annotation-label {
+            display: block;
+        }
+
+        body.simulation-active .annotation-sublabel {
+            display: block;
+        }
+
+        /* 
+        STRUCTURE ANNOTATIONS
+        Blue color scheme for structural elements like
+        headings and section containers.
+        */
+        body.simulation-active .annotation-structure .annotation-label {
+            background: #1e40af;
+            color: white;
+        }
+
+        body.simulation-active .annotation-structure .annotation-target {
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        body.simulation-active .annotation-structure .annotation-sublabel {
+            color: #3b82f6;
+        }
+
+        /* 
+        INTERACTION ANNOTATIONS
+        Blue color scheme for interactive elements like
+        buttons, dropdowns, and toggles.
+        */
+        body.simulation-active .annotation-interaction .annotation-label {
+            background: #1e40af;
+            color: white;
+        }
+
+        body.simulation-active .annotation-interaction .annotation-target {
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+        }
+
+        body.simulation-active .annotation-interaction .annotation-sublabel {
+            color: #3b82f6;
+        }
+
+        /* 
+        UI ELEMENT ANNOTATIONS
+        Blue color scheme for UI widgets like the
+        status card.
+        */
+        body.simulation-active .annotation-ui .annotation-label {
+            background: #1e40af;
+            color: white;
+        }
+
+        body.simulation-active .annotation-ui .annotation-target {
+            border: 2px solid #3b82f6;
+        }
+
+        body.simulation-active .annotation-ui .annotation-sublabel {
+            color: #3b82f6;
+        }
+
+        /* 
+        CONTENT BOX ANNOTATIONS
+        For text content areas and feature cards.
+        */
+        body.simulation-active .annotation-content .annotation-label {
+            background: #1e40af;
+            color: white;
+        }
+
+        body.simulation-active .annotation-content .annotation-target {
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+        }
+
+        body.simulation-active .annotation-content .annotation-sublabel {
+            color: #3b82f6;
+        }
+
+        /* 
+        =====================================================
+        CLARIFY CONTENT MODE STYLES
+        =====================================================
+        When "Clarify Content" is active (body has 'clarify-active' class),
+        these styles change the color scheme to gold/yellow
+        to indicate enhanced visibility mode for low vision users.
+        */
+        body.clarify-active.simulation-active .annotation-structure .annotation-label,
+        body.clarify-active.simulation-active .annotation-interaction .annotation-label,
+        body.clarify-active.simulation-active .annotation-ui .annotation-label,
+        body.clarify-active.simulation-active .annotation-content .annotation-label {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        body.clarify-active.simulation-active .annotation-structure .annotation-target,
+        body.clarify-active.simulation-active .annotation-interaction .annotation-target,
+        body.clarify-active.simulation-active .annotation-ui .annotation-target,
+        body.clarify-active.simulation-active .annotation-content .annotation-target {
+            border-color: var(--accent-gold);
+        }
+
+        body.clarify-active.simulation-active .annotation-structure .annotation-sublabel,
+        body.clarify-active.simulation-active .annotation-interaction .annotation-sublabel,
+        body.clarify-active.simulation-active .annotation-ui .annotation-sublabel,
+        body.clarify-active.simulation-active .annotation-content .annotation-sublabel {
+            color: var(--accent-gold);
+        }
+
+        /* 
+        LOW VISION MODE HEADLINE CHANGE
+        When low vision profile is selected with clarify mode,
+        the headline changes to "The Guardian for everyone."
+        with gold text instead of purple gradient.
+        */
+        body.clarify-active.low-vision-active .headline .gradient-text {
+            background: var(--accent-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 
+        RESPONSIVE TEXT FOR LOW VISION
+        In low vision + clarify mode, we show alternative
+        headline text that's more direct.
+        */
+        .headline-default { display: inline; }
+        .headline-lowvision { display: none; }
+
+        body.clarify-active.low-vision-active .headline-default { display: none; }
+        body.clarify-active.low-vision-active .headline-lowvision { display: inline; }
+
+        /* 
+        =====================================================
+        RESPONSIVE DESIGN
+        =====================================================
+        Media queries to make the layout work on smaller screens.
+        */
+        @media (max-width: 1024px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+            }
+
+            .status-card {
+                margin-top: 40px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .headline {
+                font-size: 48px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .nav-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .headline {
+                font-size: 36px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+    =====================================================
+    NAVIGATION BAR
+    =====================================================
+    Contains the AURA logo and three control elements:
+    1. Profile dropdown (Color Blind / Low Vision)
+    2. Simulate button (toggles accessibility overlay)
+    3. Clarify Content toggle (changes color scheme to gold)
+    -->
+    <nav class="navbar">
+        <!-- LOGO: Uses the annotation system to show "UI ELEMENT" label when simulation is active -->
+        <div class="annotation-box annotation-ui">
+            <span class="annotation-label">UI ELEMENT</span>
+            <div class="annotation-target logo">A U R A</div>
+            <span class="annotation-sublabel">Optimized</span>
+        </div>
+
+        <!-- NAVIGATION CONTROLS: All interactive elements grouped together -->
+        <div class="nav-controls">
+            <!-- 
+            PROFILE SELECTOR DROPDOWN
+            Allows switching between accessibility profiles.
+            The JavaScript listens for changes to apply different modes.
+            -->
+            <div class="annotation-box annotation-interaction">
+                <span class="annotation-label">INTERACTION</span>
+                <select class="profile-select annotation-target" id="profileSelect">
+                    <option value="voyager">The Voyager (Color Blind)</option>
+                    <option value="beacon">The Beacon (Low Vision)</option>
+                </select>
+                <span class="annotation-sublabel">Target Boosted</span>
+            </div>
+
+            <!-- 
+            SIMULATE BUTTON
+            When clicked, toggles the accessibility overlay on/off.
+            Button text changes between "Simulate Aura Enforcer" and "Stop Enforcement"
+            -->
+            <div class="annotation-box annotation-interaction">
+                <span class="annotation-label">INTERACTION</span>
+                <button class="btn btn-secondary btn-simulate annotation-target" id="simulateBtn">
+                    Simulate Aura Enforcer
+                </button>
+                <span class="annotation-sublabel">Target Boosted</span>
+            </div>
+
+            <!-- 
+            CLARIFY CONTENT TOGGLE
+            A toggle switch that, when active, changes the overlay
+            colors from blue to gold for enhanced visibility.
+            -->
+            <div class="annotation-box annotation-interaction">
+                <span class="annotation-label">INTERACTION</span>
+                <div class="toggle-container annotation-target">
+                    <div class="toggle-switch" id="clarifyToggle"></div>
+                    <span class="toggle-label">Clarify Content</span>
+                </div>
+                <span class="annotation-sublabel">Target Boosted</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 
+    =====================================================
+    MAIN CONTENT AREA
+    =====================================================
+    The primary hero section of the page containing:
+    - Version badge
+    - Main headline (changes based on mode)
+    - Description text
+    - CTA buttons
+    - Status card
+    -->
+    <main class="main-content">
+        <!-- VERSION BADGE: Shows current software version -->
+        <div class="version-badge">Aura Enforcer | Alpha 0.1</div>
+
+        <div class="hero-section">
+            <!-- LEFT COLUMN: Headline, description, and buttons -->
+            <div class="hero-content">
+                <!-- 
+                MAIN HEADLINE
+                Wrapped in annotation box to show "STRUCTURE" label.
+                Contains two versions:
+                - Default: "The Guardian of Accessibility."
+                - Low Vision: "The Guardian for everyone."
+                -->
+                <div class="annotation-box annotation-structure">
+                    <span class="annotation-label">STRUCTURE</span>
+                    <h1 class="headline annotation-target">
+                        <span class="headline-default">
+                            The Guardian of<br>
+                            <span class="gradient-text">Accessibility.</span>
+                        </span>
+                        <span class="headline-lowvision">
+                            The <span class="gradient-text">Guardian</span> for<br>
+                            everyone.
+                        </span>
+                    </h1>
+                    <span class="annotation-sublabel">Readable</span>
+                </div>
+
+                <!-- DESCRIPTION: Explains what Aura does -->
+                <p class="description">
+                    Intelligence that lives between your windows. Aura 
+                    identifies, cleans, and fixes digital barriers in real-time, 
+                    bringing inclusive experiences to every application on your 
+                    machine.
+                </p>
+
+                <!-- 
+                CTA BUTTONS
+                Two buttons for main user actions:
+                - Download for Windows (primary action)
+                - Watch the Vision (secondary action)
+                -->
+                <div class="button-group">
+                    <div class="annotation-box annotation-interaction">
+                        <span class="annotation-label">INTERACTION</span>
+                        <button class="btn btn-primary annotation-target">Download for Windows</button>
+                        <span class="annotation-sublabel">Target Boosted</span>
+                    </div>
+                    <div class="annotation-box annotation-interaction">
+                        <span class="annotation-label">INTERACTION</span>
+                        <button class="btn btn-secondary annotation-target">Watch the Vision</button>
+                        <span class="annotation-sublabel">Target Boosted</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+            RIGHT COLUMN: STATUS CARD
+            Shows real-time status of the Aura tool including:
+            - What application is being scanned
+            - How many fixes have been applied
+            - Current operational mode
+            -->
+            <div class="annotation-box annotation-ui">
+                <span class="annotation-label">UI ELEMENT</span>
+                <div class="status-card annotation-target">
+                    <div class="status-item">
+                        <span class="status-label">Scanning: </span>
+                        <span class="status-value">Notepad.exe</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Fixes Applied: </span>
+                        <span class="status-value">12</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Mode: </span>
+                        <span class="status-value">ENFORCING</span>
+                    </div>
+                </div>
+                <span class="annotation-sublabel">Optimized</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- 
+    =====================================================
+    FEATURES SECTION
+    =====================================================
+    "Universal Empowerment" section showcasing three main
+    features of the Aura tool:
+    1. Visual Enforcement - Fixes contrast and touch targets
+    2. Aura Narrative - Text-to-speech engine
+    3. Vision Core - Privacy-focused on-device AI
+    -->
+    <section class="features-section">
+        <!-- SECTION HEADER -->
+        <div class="annotation-box annotation-structure">
+            <span class="annotation-label">STRUCTURE</span>
+            <div class="annotation-target">
+                <h2 class="section-title">Universal Empowerment</h2>
+            </div>
+        </div>
+        
+        <!-- 
+        SUBTITLE
+        Wrapped in content box annotation to show different
+        element types during simulation.
+        -->
+        <div class="annotation-box annotation-content">
+            <span class="annotation-label">CONTENT BOX</span>
+            <p class="section-subtitle annotation-target">
+                For the web, legacy apps, and everything in between.
+            </p>
+            <span class="annotation-sublabel">Readable</span>
+        </div>
+
+        <!-- FEATURES GRID: Three cards in a row -->
+        <div class="features-grid">
+            <!-- 
+            FEATURE CARD 1: Visual Enforcement
+            Describes the visual correction capabilities.
+            -->
+            <div class="annotation-box annotation-content">
+                <span class="annotation-label">CONTENT BOX</span>
+                <div class="feature-card annotation-target">
+                    <div class="annotation-box annotation-structure" style="display: block; margin-bottom: 16px;">
+                        <span class="annotation-label">STRUCTURE</span>
+                        <h3 class="feature-title annotation-target">Visual Enforcement</h3>
+                        <span class="annotation-sublabel">Readable</span>
+                    </div>
+                    <p class="feature-description">
+                        Auto-corrects low contrast, identifies unlabelled icons, 
+                        and enlarges tiny touch targets.
+                    </p>
+                </div>
+                <span class="annotation-sublabel">Semantic</span>
+            </div>
+
+            <!-- 
+            FEATURE CARD 2: Aura Narrative
+            Describes the text-to-speech capabilities.
+            -->
+            <div class="annotation-box annotation-content">
+                <span class="annotation-label">CONTENT BOX</span>
+                <div class="feature-card annotation-target">
+                    <div class="annotation-box annotation-structure" style="display: block; margin-bottom: 16px;">
+                        <span class="annotation-label">STRUCTURE</span>
+                        <h3 class="feature-title annotation-target">Aura Narrative</h3>
+                        <span class="annotation-sublabel">Readable</span>
+                    </div>
+                    <p class="feature-description">
+                        A smart, localized TTS engine that describes the screen 
+                        as you move, without the noise of traditional screen readers.
+                    </p>
+                </div>
+                <span class="annotation-sublabel">Semantic</span>
+            </div>
+
+            <!-- 
+            FEATURE CARD 3: Vision Core
+            Describes the privacy-focused AI capabilities.
+            -->
+            <div class="annotation-box annotation-content">
+                <span class="annotation-label">CONTENT BOX</span>
+                <div class="feature-card annotation-target">
+                    <div class="annotation-box annotation-structure" style="display: block; margin-bottom: 16px;">
+                        <span class="annotation-label">STRUCTURE</span>
+                        <h3 class="feature-title annotation-target">Vision Core</h3>
+                        <span class="annotation-sublabel">Readable</span>
+                    </div>
+                    <p class="feature-description">
+                        100% On-device AI. Your screen data never leaves your 
+                        computer. Privacy is an accessibility right.
+                    </p>
+                </div>
+                <span class="annotation-sublabel">Semantic</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    =====================================================
+    FOOTER
+    =====================================================
+    Simple footer with copyright and company information.
+    -->
+    <footer class="footer">
+        <p>&copy; 2026 Aura Systems. Part of the <a href="#">Tworam Ecosystem</a>.</p>
+    </footer>
+
+    <!-- 
+    =====================================================
+    JAVASCRIPT FUNCTIONALITY
+    =====================================================
+    This script handles all the interactive features:
+    1. Simulate button toggle (shows/hides accessibility overlays)
+    2. Clarify Content toggle (changes color scheme)
+    3. Profile selector (switches between color blind/low vision modes)
+    -->
+    <script>
+        /* 
+        =====================================================
+        DOM ELEMENT REFERENCES
+        =====================================================
+        Get references to all interactive elements we need
+        to attach event listeners to.
+        */
+        const simulateBtn = document.getElementById('simulateBtn');
+        const clarifyToggle = document.getElementById('clarifyToggle');
+        const profileSelect = document.getElementById('profileSelect');
+
+        /* 
+        =====================================================
+        STATE VARIABLES
+        =====================================================
+        Track the current state of each feature.
+        */
+        let isSimulating = false;  // Is the accessibility overlay active?
+        let isClarifyActive = false;  // Is the clarify content mode active?
+
+        /* 
+        =====================================================
+        SIMULATE BUTTON CLICK HANDLER
+        =====================================================
+        When clicked, this function:
+        1. Toggles the simulation state
+        2. Adds/removes the 'simulation-active' class from body
+        3. Updates the button text and styling
+        4. Applies the current profile mode
+        */
+        simulateBtn.addEventListener('click', function() {
+            isSimulating = !isSimulating;
+            
+            if (isSimulating) {
+                // ACTIVATE SIMULATION
+                // Add class to body to trigger CSS annotation styles
+                document.body.classList.add('simulation-active');
+                // Change button to show "Stop" state
+                this.textContent = 'Stop Enforcement';
+                this.classList.add('active');
+                // Apply the currently selected profile
+                applyProfile();
+            } else {
+                // DEACTIVATE SIMULATION
+                // Remove all simulation-related classes
+                document.body.classList.remove('simulation-active');
+                document.body.classList.remove('low-vision-active');
+                // Reset button text and styling
+                this.textContent = 'Simulate Aura Enforcer';
+                this.classList.remove('active');
+            }
+        });
+
+        /* 
+        =====================================================
+        CLARIFY TOGGLE CLICK HANDLER
+        =====================================================
+        When clicked, this function:
+        1. Toggles the clarify state
+        2. Adds/removes the 'clarify-active' class from body
+        3. Updates the toggle switch visual state
+        */
+        clarifyToggle.addEventListener('click', function() {
+            isClarifyActive = !isClarifyActive;
+            
+            if (isClarifyActive) {
+                // ACTIVATE CLARIFY MODE
+                // Add class to trigger gold color scheme
+                document.body.classList.add('clarify-active');
+                // Update toggle switch appearance
+                this.classList.add('active');
+            } else {
+                // DEACTIVATE CLARIFY MODE
+                document.body.classList.remove('clarify-active');
+                this.classList.remove('active');
+            }
+        });
+
+        /* 
+        =====================================================
+        PROFILE SELECT CHANGE HANDLER
+        =====================================================
+        When the user selects a different profile from the
+        dropdown, this applies the appropriate mode.
+        */
+        profileSelect.addEventListener('change', function() {
+            // Only apply if simulation is currently active
+            if (isSimulating) {
+                applyProfile();
+            }
+        });
+
+        /* 
+        =====================================================
+        APPLY PROFILE FUNCTION
+        =====================================================
+        This function checks which profile is selected and
+        applies the appropriate CSS class to the body.
+        
+        - "voyager" (Color Blind): Standard blue overlay
+        - "beacon" (Low Vision): Enables special headline text
+          when combined with clarify mode
+        */
+        function applyProfile() {
+            const profile = profileSelect.value;
+            
+            if (profile === 'beacon') {
+                // LOW VISION MODE
+                // Add class that triggers headline text change
+                document.body.classList.add('low-vision-active');
+            } else {
+                // COLOR BLIND MODE
+                // Remove low vision specific class
+                document.body.classList.remove('low-vision-active');
+            }
+        }
+    </script>
+</body>
+</html>
