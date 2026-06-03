@@ -541,6 +541,8 @@
             border: 2px solid #3b82f6;
             border-radius: 8px;
             padding: 16px;
+            /* Faint blue background fill for Voyager (Color Blind) mode */
+            background: rgba(59, 130, 246, 0.08);
         }
 
         body.simulation-active .annotation-structure .annotation-sublabel {
@@ -560,6 +562,8 @@
         body.simulation-active .annotation-interaction .annotation-target {
             border: 2px solid #3b82f6;
             border-radius: 8px;
+            /* Faint blue background fill for Voyager (Color Blind) mode */
+            background: rgba(59, 130, 246, 0.08);
         }
 
         body.simulation-active .annotation-interaction .annotation-sublabel {
@@ -578,6 +582,8 @@
 
         body.simulation-active .annotation-ui .annotation-target {
             border: 2px solid #3b82f6;
+            /* Faint blue background fill for Voyager (Color Blind) mode */
+            background: rgba(59, 130, 246, 0.08);
         }
 
         body.simulation-active .annotation-ui .annotation-sublabel {
@@ -596,6 +602,8 @@
         body.simulation-active .annotation-content .annotation-target {
             border: 2px solid #3b82f6;
             border-radius: 8px;
+            /* Faint blue background fill for Voyager (Color Blind) mode */
+            background: rgba(59, 130, 246, 0.08);
         }
 
         body.simulation-active .annotation-content .annotation-sublabel {
@@ -604,31 +612,35 @@
 
         /* 
         =====================================================
-        CLARIFY CONTENT MODE STYLES
+        LOW VISION PROFILE STYLES (THE BEACON)
         =====================================================
-        When "Clarify Content" is active (body has 'clarify-active' class),
-        these styles change the color scheme to gold/yellow
-        to indicate enhanced visibility mode for low vision users.
+        When "The Beacon (Low Vision)" profile is selected with simulation active,
+        these styles change the color scheme from blue to gold/yellow
+        for enhanced visibility for low vision users.
+        The color is determined by PROFILE selection, not Clarify Content.
         */
-        body.clarify-active.simulation-active .annotation-structure .annotation-label,
-        body.clarify-active.simulation-active .annotation-interaction .annotation-label,
-        body.clarify-active.simulation-active .annotation-ui .annotation-label,
-        body.clarify-active.simulation-active .annotation-content .annotation-label {
+        body.simulation-active.low-vision-active .annotation-structure .annotation-label,
+        body.simulation-active.low-vision-active .annotation-interaction .annotation-label,
+        body.simulation-active.low-vision-active .annotation-ui .annotation-label,
+        body.simulation-active.low-vision-active .annotation-content .annotation-label {
             background: var(--accent-gold);
             color: #000;
         }
 
-        body.clarify-active.simulation-active .annotation-structure .annotation-target,
-        body.clarify-active.simulation-active .annotation-interaction .annotation-target,
-        body.clarify-active.simulation-active .annotation-ui .annotation-target,
-        body.clarify-active.simulation-active .annotation-content .annotation-target {
+        body.simulation-active.low-vision-active .annotation-structure .annotation-target,
+        body.simulation-active.low-vision-active .annotation-interaction .annotation-target,
+        body.simulation-active.low-vision-active .annotation-ui .annotation-target,
+        body.simulation-active.low-vision-active .annotation-content .annotation-target {
             border-color: var(--accent-gold);
+            /* Faint orange background fill for Beacon (Low Vision) mode,
+               overrides the blue fill set in the default simulation styles */
+            background: rgba(234, 179, 8, 0.08);
         }
 
-        body.clarify-active.simulation-active .annotation-structure .annotation-sublabel,
-        body.clarify-active.simulation-active .annotation-interaction .annotation-sublabel,
-        body.clarify-active.simulation-active .annotation-ui .annotation-sublabel,
-        body.clarify-active.simulation-active .annotation-content .annotation-sublabel {
+        body.simulation-active.low-vision-active .annotation-structure .annotation-sublabel,
+        body.simulation-active.low-vision-active .annotation-interaction .annotation-sublabel,
+        body.simulation-active.low-vision-active .annotation-ui .annotation-sublabel,
+        body.simulation-active.low-vision-active .annotation-content .annotation-sublabel {
             color: var(--accent-gold);
         }
 
@@ -639,7 +651,7 @@
         with gold text instead of purple gradient.
         This only applies when simulation is active.
         */
-        body.simulation-active.clarify-active.low-vision-active .headline .gradient-text {
+        body.simulation-active.low-vision-active.clarify-active .headline .gradient-text {
             background: var(--accent-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -654,30 +666,30 @@
         .headline-default { display: inline; }
         .headline-lowvision { display: none; }
 
-        body.simulation-active.clarify-active.low-vision-active .headline-default { display: none; }
-        body.simulation-active.clarify-active.low-vision-active .headline-lowvision { display: inline; }
+        body.simulation-active.low-vision-active.clarify-active .headline-default { display: none; }
+        body.simulation-active.low-vision-active.clarify-active .headline-lowvision { display: inline; }
 
         /* 
         =====================================================
-        CLARIFY CONTENT STANDALONE MODE (NO SIMULATION)
+        CLARIFY CONTENT MODE - SIZE INCREASE
         =====================================================
-        When clarify content is active WITHOUT simulation,
-        it increases text size and improves readability
-        but does NOT show annotation boxes.
+        When clarify content is active, it increases text size 
+        and improves readability. This works both with and without
+        simulation active.
         */
-        body.clarify-active:not(.simulation-active) {
+        body.clarify-active {
             font-size: 110%;
         }
 
-        body.clarify-active:not(.simulation-active) .headline {
+        body.clarify-active .headline {
             font-size: 80px;
         }
 
-        body.clarify-active:not(.simulation-active) .description {
+        body.clarify-active .description {
             font-size: 20px;
         }
 
-        body.clarify-active:not(.simulation-active) .feature-description {
+        body.clarify-active .feature-description {
             font-size: 17px;
         }
 
@@ -704,7 +716,7 @@
                 font-size: 48px;
             }
 
-            body.clarify-active:not(.simulation-active) .headline {
+            body.clarify-active .headline {
                 font-size: 54px;
             }
         }
@@ -729,7 +741,7 @@
                 flex-direction: column;
             }
 
-            body.clarify-active:not(.simulation-active) .headline {
+            body.clarify-active .headline {
                 font-size: 40px;
             }
         }
