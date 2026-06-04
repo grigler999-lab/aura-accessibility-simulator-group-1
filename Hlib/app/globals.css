@@ -173,7 +173,6 @@
   .profile-lowvision {
     --accent-color: oklch(0.90 0.18 85);
     --accent-secondary: oklch(0.85 0.20 60);
-    font-size: 1.15em;
   }
   
   .profile-lowvision .accent-text {
@@ -187,49 +186,65 @@
     border-width: 2px;
   }
   
-  .profile-lowvision h1,
+  .profile-lowvision h1 {
+    font-size: 1.15em;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  
   .profile-lowvision h2,
   .profile-lowvision h3 {
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: 700;
-    letter-spacing: 0.01em;
   }
   
   .profile-lowvision p {
     font-size: 1.1em;
     font-weight: 500;
-    color: oklch(0.92 0 0);
+    color: oklch(0.95 0 0);
   }
   
   .profile-lowvision button {
-    font-size: 1.1em;
-    padding: 1rem 1.75rem;
+    font-size: 1.05em;
+    padding: 0.875rem 1.5rem;
     font-weight: 600;
+  }
+  
+  .profile-lowvision .status-value {
+    font-size: 1.2em;
+    font-weight: 700;
   }
 
   /* ========================================
      PROFILE: DYSLEXIA (Reader)
-     Increased spacing, readable font
+     Clean readable styling with increased spacing
+     Uses system fonts optimized for readability
      ======================================== */
   .profile-dyslexia {
-    font-family: 'Lexend', 'OpenDyslexic', 'Comic Sans MS', sans-serif;
-    line-height: 2;
-    letter-spacing: 0.08em;
-    word-spacing: 0.25em;
+    font-family: 'Inter', 'Atkinson Hyperlegible', 'Verdana', system-ui, sans-serif;
+    line-height: 1.8;
+    letter-spacing: 0.03em;
+    word-spacing: 0.12em;
   }
   
   .profile-dyslexia p,
-  .profile-dyslexia span,
-  .profile-dyslexia div {
-    line-height: 2.1;
+  .profile-dyslexia span:not(.font-mono),
+  .profile-dyslexia div:not(.font-mono) {
+    line-height: 1.9;
+    letter-spacing: 0.025em;
   }
   
   .profile-dyslexia h1,
   .profile-dyslexia h2,
   .profile-dyslexia h3 {
-    letter-spacing: 0.04em;
-    word-spacing: 0.15em;
-    line-height: 1.6;
+    letter-spacing: 0.02em;
+    word-spacing: 0.08em;
+    line-height: 1.4;
+  }
+  
+  .profile-dyslexia .text-block,
+  .profile-dyslexia p + p {
+    margin-top: 1.5em;
   }
   
   .profile-dyslexia .accent-text {

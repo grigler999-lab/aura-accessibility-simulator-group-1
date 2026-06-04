@@ -1,15 +1,52 @@
 "use client"
 
 import { AccessibilityProfile } from "@/app/page"
-import { Download, Play, Target, Eye, Type } from "lucide-react"
+import { Download, Play, Target, Eye, Type, Info, Keyboard, AlertCircle } from "lucide-react"
 
 interface HeroSectionProps {
   isEnforcing: boolean
   glowClass: string
   selectedProfile: AccessibilityProfile
+  clarifyContent: boolean
 }
 
-export function HeroSection({ isEnforcing, glowClass, selectedProfile }: HeroSectionProps) {
+const profileExplanations: Record<AccessibilityProfile, { name: string; purpose: string; changes: string }> = {
+  colorblind: {
+    name: "The Voyager (Color Blind)",
+    purpose: "Helps users who cannot rely on color alone.",
+    changes: "Color-safe palette, clear labels, stronger visual separation.",
+  },
+  lowvision: {
+    name: "The Beacon (Low Vision)",
+    purpose: "Helps users with reduced vision.",
+    changes: "Larger text, stronger contrast, yellow focus outlines.",
+  },
+  dyslexia: {
+    name: "The Reader (Dyslexia)",
+    purpose: "Helps users read content more comfortably.",
+    changes: "Better spacing, clearer typography, less dense text.",
+  },
+  lightsensitivity: {
+    name: "The Shield (Light Sensitivity)",
+    purpose: "Helps users who are sensitive to bright light.",
+    changes: "Softer glow, reduced brightness, calmer dark theme.",
+  },
+  motordifficulty: {
+    name: "The Navigator (Motor Difficulty)",
+    purpose: "Helps users who need easier interaction targets.",
+    changes: "Larger buttons, more spacing, easier click targets.",
+  },
+}
+
+// Original advanced text
+const originalHeroText = "AURA is your AI-powered accessibility assistant that enforces visual clarity, semantic structure, and inclusive design across any application in real-time."
+
+// Simplified clarified text
+const clarifiedHeroText = "Aura helps people use apps more easily. It finds parts of the screen that are hard to see, read, or click, and improves them in real time."
+
+export function HeroSection({ isEnforcing, glowClass, selectedProfile, clarifyContent }: HeroSectionProps) {
+  const currentExplanation = profileExplanations[selectedProfile]
+
   const getGradientClass = () => {
     switch (selectedProfile) {
       case "colorblind":
@@ -93,6 +130,57 @@ export function HeroSection({ isEnforcing, glowClass, selectedProfile }: HeroSec
     }
   }
 
+  const getIconBgColor = () => {
+    switch (selectedProfile) {
+      case "colorblind":
+        return "bg-cyan-500/15"
+      case "lowvision":
+        return "bg-yellow-500/20"
+      case "lightsensitivity":
+        return "bg-gray-500/10"
+      case "dyslexia":
+        return "bg-blue-500/15"
+      case "motordifficulty":
+        return "bg-green-500/15"
+      default:
+        return "bg-blue-500/15"
+    }
+  }
+
+  const getTextAccentColor = () => {
+    switch (selectedProfile) {
+      case "colorblind":
+        return "text-cyan-400"
+      case "lowvision":
+        return "text-yellow-400"
+      case "lightsensitivity":
+        return "text-gray-400"
+      case "dyslexia":
+        return "text-blue-400"
+      case "motordifficulty":
+        return "text-green-400"
+      default:
+        return "text-blue-400"
+    }
+  }
+
+  const getBorderAccent = () => {
+    switch (selectedProfile) {
+      case "colorblind":
+        return "border-cyan-500/30"
+      case "lowvision":
+        return "border-yellow-500/40"
+      case "lightsensitivity":
+        return "border-gray-500/20"
+      case "dyslexia":
+        return "border-blue-500/30"
+      case "motordifficulty":
+        return "border-green-500/30"
+      default:
+        return "border-blue-500/30"
+    }
+  }
+
   return (
     <div className="flex-1 pt-8 lg:pt-16">
       {/* Alpha Badge */}
@@ -122,14 +210,20 @@ export function HeroSection({ isEnforcing, glowClass, selectedProfile }: HeroSec
         )}
       </div>
 
-      {/* Description */}
-      <p className="text-lg lg:text-xl text-muted-foreground max-w-xl leading-relaxed mb-10 transition-all duration-500">
-        AURA is your AI-powered accessibility assistant that enforces visual clarity, 
-        semantic structure, and inclusive design across any application in real-time.
-      </p>
+      {/* Description with Clarify indicator */}
+      <div className="relative mb-10">
+        <p className="text-lg lg:text-xl text-muted-foreground max-w-xl leading-relaxed transition-all duration-500">
+          {clarifyContent ? clarifiedHeroText : originalHeroText}
+        </p>
+        {clarifyContent && (
+          <span className={`absolute -top-2 -right-2 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded border whitespace-nowrap ${getLabelColor()}`}>
+            Clarified
+          </span>
+        )}
+      </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 mb-10">
         <div className="relative">
           <button
             className={`inline-flex items-center gap-3 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-500 border ${getAccentColor()} ${isEnforcing ? glowClass : ""}`}
@@ -157,6 +251,61 @@ export function HeroSection({ isEnforcing, glowClass, selectedProfile }: HeroSec
             </span>
           )}
         </div>
+      </div>
+
+      {/* Keyboard Accessibility Hint */}
+      <div className={`flex items-center gap-2 text-xs text-muted-foreground mb-6 p-3 rounded-lg ${getIconBgColor()} border ${getBorderAccent()} max-w-xl`}>
+        <Keyboard className={`w-4 h-4 ${getTextAccentColor()}`} />
+        <span>Keyboard support: Use <kbd className="px-1.5 py-0.5 rounded bg-background/50 font-mono text-[10px]">Tab</kbd> to move between controls and <kbd className="px-1.5 py-0.5 rounded bg-background/50 font-mono text-[10px]">Enter</kbd> or <kbd className="px-1.5 py-0.5 rounded bg-background/50 font-mono text-[10px]">Space</kbd> to activate actions.</span>
+      </div>
+
+      {/* Profile Explanation Panel */}
+      <div className={`p-4 rounded-xl ${getIconBgColor()} border ${getBorderAccent()} max-w-xl mb-6 transition-all duration-500`}>
+        <div className="flex items-center gap-2 mb-3">
+          <Info className={`w-4 h-4 ${getTextAccentColor()}`} />
+          <span className={`text-sm font-semibold ${getTextAccentColor()}`}>Current Profile</span>
+        </div>
+        <div className="space-y-2">
+          <div className="text-foreground font-medium">{currentExplanation.name}</div>
+          <div className="text-sm text-muted-foreground">
+            <span className={`font-medium ${getTextAccentColor()}`}>Purpose:</span> {currentExplanation.purpose}
+          </div>
+          <div className="text-sm text-muted-foreground">
+            <span className={`font-medium ${getTextAccentColor()}`}>Main Changes:</span> {currentExplanation.changes}
+          </div>
+        </div>
+      </div>
+
+      {/* Before/After Indicator */}
+      <div className={`p-4 rounded-xl glass border ${isEnforcing ? getBorderAccent() : "border-border/30"} max-w-xl mb-6 transition-all duration-500`}>
+        <div className="flex items-center gap-2 mb-3">
+          <Eye className={`w-4 h-4 ${isEnforcing ? getTextAccentColor() : "text-muted-foreground"}`} />
+          <span className={`text-sm font-semibold ${isEnforcing ? getTextAccentColor() : "text-muted-foreground"}`}>Accessibility Scan</span>
+        </div>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <div className="text-muted-foreground mb-1">Before AURA</div>
+            <div className="text-orange-400 font-medium">Barriers detected</div>
+          </div>
+          <div>
+            <div className="text-muted-foreground mb-1">After AURA</div>
+            <div className={`font-medium ${isEnforcing ? "text-green-400" : "text-muted-foreground"}`}>
+              {isEnforcing ? "Interface optimized" : "Not applied yet"}
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 pt-3 border-t border-border/30 flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">Accessibility Score</span>
+          <span className={`text-lg font-mono font-bold ${isEnforcing ? "text-green-400" : "text-orange-400"}`}>
+            {isEnforcing ? "94%" : "64%"}
+          </span>
+        </div>
+      </div>
+
+      {/* Simulation Note */}
+      <div className="flex items-start gap-2 text-xs text-muted-foreground/70 max-w-xl">
+        <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+        <span>This is a frontend simulation. No real operating system scanning is performed.</span>
       </div>
     </div>
   )

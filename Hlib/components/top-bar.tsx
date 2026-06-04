@@ -6,10 +6,9 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { Eye, Palette, Sun, BookOpen, Shield, Hand } from "lucide-react"
+import { Eye, Palette, Sun, BookOpen, Shield, Hand, RotateCcw } from "lucide-react"
 
 interface TopBarProps {
   selectedProfile: AccessibilityProfile
@@ -19,6 +18,7 @@ interface TopBarProps {
   clarifyContent: boolean
   onToggleClarify: () => void
   glowClass: string
+  onReset: () => void
 }
 
 const profiles: { value: AccessibilityProfile; label: string; icon: typeof Eye; description: string }[] = [
@@ -37,6 +37,7 @@ export function TopBar({
   clarifyContent,
   onToggleClarify,
   glowClass,
+  onReset,
 }: TopBarProps) {
   const currentProfile = profiles.find(p => p.value === selectedProfile)
   const ProfileIcon = currentProfile?.icon || Eye
@@ -101,26 +102,33 @@ export function TopBar({
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {/* Profile Dropdown */}
           <div className="relative">
             <Select value={selectedProfile} onValueChange={(v) => onSelectProfile(v as AccessibilityProfile)}>
-              <SelectTrigger 
-                className={`w-[200px] h-12 rounded-full glass border-2 text-sm font-medium transition-all duration-500 accent-bg ${isEnforcing ? glowClass : ""}`}
+              <SelectTrigger
+                className={`w-[260px] min-h-14 rounded-full glass border-2 text-sm font-medium transition-all duration-500 accent-bg px-5 py-2 ${isEnforcing ? glowClass : ""}`}
               >
-                <div className="flex items-center gap-2">
-                  <ProfileIcon className={`w-4 h-4 ${getAccentColor()}`} />
-                  <SelectValue placeholder="Select profile" />
+                <div className="flex items-center gap-3 w-full overflow-hidden">
+                  <ProfileIcon className={`w-4 h-4 shrink-0 ${getAccentColor()}`} />
+                  <div className="flex flex-col items-start justify-center leading-none overflow-hidden">
+                    <span className="font-semibold text-sm leading-5 truncate">
+                      The {currentProfile?.label}
+                    </span>
+                    <span className="text-xs text-muted-foreground leading-4 truncate">
+                      {currentProfile?.description}
+                    </span>
+                  </div>
                 </div>
               </SelectTrigger>
-              <SelectContent className="glass border-border/50">
+              <SelectContent className="glass border-border/50 min-w-[240px]">
                 {profiles.map((profile) => (
-                  <SelectItem key={profile.value} value={profile.value} className="cursor-pointer py-3">
+                  <SelectItem key={profile.value} value={profile.value} className="cursor-pointer py-3 px-3">
                     <div className="flex items-center gap-3">
-                      <profile.icon className="w-4 h-4" />
-                      <div className="flex flex-col">
-                        <span className="font-medium">{profile.label}</span>
-                        <span className="text-xs text-muted-foreground">{profile.description}</span>
+                      <profile.icon className="w-4 h-4 shrink-0" />
+                      <div className="flex flex-col items-start gap-0.5">
+                        <span className="font-medium leading-tight">The {profile.label}</span>
+                        <span className="text-xs text-muted-foreground leading-tight">{profile.description}</span>
                       </div>
                     </div>
                   </SelectItem>
@@ -169,6 +177,16 @@ export function TopBar({
               </span>
             )}
           </div>
+
+          {/* Reset Simulation Button */}
+          <button
+            onClick={onReset}
+            className="flex items-center gap-2 px-4 h-10 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground glass border border-border/40 hover:border-border/60 transition-all duration-300"
+            title="Reset Simulation"
+          >
+            <RotateCcw className="w-4 h-4" />
+            <span className="hidden sm:inline">Reset</span>
+          </button>
         </div>
       </div>
     </header>

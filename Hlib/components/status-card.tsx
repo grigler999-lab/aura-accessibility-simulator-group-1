@@ -1,7 +1,7 @@
 "use client"
 
 import { AccessibilityProfile } from "@/app/page"
-import { Activity, CheckCircle, Zap, Eye, AlertCircle } from "lucide-react"
+import { Activity, CheckCircle, Zap, Eye, AlertCircle, FileText, AlertTriangle, Wrench } from "lucide-react"
 
 interface StatusCardProps {
   isEnforcing: boolean
@@ -9,9 +9,37 @@ interface StatusCardProps {
   selectedProfile: AccessibilityProfile
 }
 
+const profileReports: Record<AccessibilityProfile, { barriers: string[]; fixes: string[] }> = {
+  colorblind: {
+    barriers: ["Color-only indicators", "Low label clarity"],
+    fixes: ["Added text labels", "Applied color-safe contrast"],
+  },
+  lowvision: {
+    barriers: ["Small text", "Weak contrast"],
+    fixes: ["Increased text size", "Added high-contrast yellow outlines"],
+  },
+  dyslexia: {
+    barriers: ["Dense text blocks", "Low readability"],
+    fixes: ["Increased spacing", "Improved text readability"],
+  },
+  lightsensitivity: {
+    barriers: ["Bright highlights", "Strong glow effects"],
+    fixes: ["Reduced brightness", "Softened glow intensity"],
+  },
+  motordifficulty: {
+    barriers: ["Small click targets", "Tight spacing"],
+    fixes: ["Enlarged buttons", "Increased interaction spacing"],
+  },
+}
+
 export function StatusCard({ isEnforcing, glowClass, selectedProfile }: StatusCardProps) {
   const fixesApplied = isEnforcing ? 12 : 0
   const mode = isEnforcing ? "ENFORCING" : "IDLE"
+  const detectedIssues = isEnforcing ? 12 : null
+  const resolvedFixes = isEnforcing ? 12 : 0
+  const accessibilityScore = isEnforcing ? 94 : 64
+
+  const currentReport = profileReports[selectedProfile]
 
   const getBorderColor = () => {
     if (!isEnforcing) return "border-border/50"
@@ -99,8 +127,14 @@ export function StatusCard({ isEnforcing, glowClass, selectedProfile }: StatusCa
     }
   }
 
+  const getScoreColor = () => {
+    if (accessibilityScore >= 90) return "text-green-400"
+    if (accessibilityScore >= 70) return "text-yellow-400"
+    return "text-orange-400"
+  }
+
   return (
-    <div className="lg:w-[380px] lg:mt-16">
+    <div className="lg:w-[400px] lg:mt-16">
       <div className={`relative rounded-2xl glass border-2 ${getBorderColor()} p-6 transition-all duration-500 ${isEnforcing ? glowClass : ""}`}>
         {/* Scan Animation Overlay */}
         {isEnforcing && (
@@ -110,7 +144,7 @@ export function StatusCard({ isEnforcing, glowClass, selectedProfile }: StatusCa
         )}
 
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-5">
           <div className={`p-2.5 rounded-lg ${isEnforcing ? getIconBgColor() : "bg-muted"} transition-all duration-500`}>
             <Activity className={`w-5 h-5 ${isEnforcing ? getAccentColor() : "text-muted-foreground"} transition-colors duration-500`} />
           </div>
@@ -124,7 +158,7 @@ export function StatusCard({ isEnforcing, glowClass, selectedProfile }: StatusCa
         </div>
 
         {/* Profile Indicator */}
-        <div className={`mb-6 p-3 rounded-xl transition-all duration-500 ${isEnforcing ? getIconBgColor() : "bg-muted/50"} border ${getBorderColor()}`}>
+        <div className={`mb-5 p-3 rounded-xl transition-all duration-500 ${isEnforcing ? getIconBgColor() : "bg-muted/50"} border ${getBorderColor()}`}>
           <div className="flex items-center gap-3">
             <Eye className={`w-5 h-5 ${getAccentColor()} transition-colors duration-500`} />
             <div>
@@ -141,24 +175,24 @@ export function StatusCard({ isEnforcing, glowClass, selectedProfile }: StatusCa
         </div>
 
         {/* Status Items */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between py-3 border-b border-border/30">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between py-2 border-b border-border/30">
             <span className="text-sm text-muted-foreground">Scanning</span>
-            <span className={`text-sm font-mono ${isEnforcing ? getAccentColor() : "text-muted-foreground"} transition-colors duration-500`}>
+            <span className={`text-sm font-mono status-value ${isEnforcing ? getAccentColor() : "text-muted-foreground"} transition-colors duration-500`}>
               {isEnforcing ? "Notepad.exe" : "—"}
             </span>
           </div>
 
-          <div className="flex items-center justify-between py-3 border-b border-border/30">
+          <div className="flex items-center justify-between py-2 border-b border-border/30">
             <span className="text-sm text-muted-foreground">Fixes Applied</span>
-            <span className={`text-lg font-mono font-bold ${isEnforcing ? (selectedProfile === "lowvision" ? "text-yellow-400" : "text-green-400") : "text-muted-foreground"} transition-colors duration-500`}>
+            <span className={`text-lg font-mono font-bold status-value ${isEnforcing ? (selectedProfile === "lowvision" ? "text-yellow-400" : "text-green-400") : "text-muted-foreground"} transition-colors duration-500`}>
               {fixesApplied}
             </span>
           </div>
 
-          <div className="flex items-center justify-between py-3">
+          <div className="flex items-center justify-between py-2">
             <span className="text-sm text-muted-foreground">Mode</span>
-            <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono font-semibold transition-all duration-500 ${
+            <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold transition-all duration-500 ${
               isEnforcing 
                 ? `${getIconBgColor()} ${getAccentColor()} border ${getBorderColor()}` 
                 : "bg-muted text-muted-foreground"
@@ -169,9 +203,73 @@ export function StatusCard({ isEnforcing, glowClass, selectedProfile }: StatusCa
           </div>
         </div>
 
+        {/* Accessibility Report Section */}
+        <div className="mt-5 pt-4 border-t border-border/30">
+          <div className="flex items-center gap-2 mb-4">
+            <FileText className={`w-4 h-4 ${getAccentColor()}`} />
+            <span className={`text-sm font-semibold ${getAccentColor()}`}>Accessibility Report</span>
+          </div>
+
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Detected Issues</span>
+              <span className={`font-mono status-value ${isEnforcing ? "text-orange-400" : "text-muted-foreground"}`}>
+                {detectedIssues !== null ? detectedIssues : "—"}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Resolved Fixes</span>
+              <span className={`font-mono status-value ${isEnforcing ? "text-green-400" : "text-muted-foreground"}`}>
+                {resolvedFixes}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Accessibility Score</span>
+              <span className={`font-mono font-bold status-value ${getScoreColor()}`}>
+                {accessibilityScore}%
+              </span>
+            </div>
+          </div>
+
+          {/* Profile-specific barriers and fixes */}
+          {isEnforcing && (
+            <div className="space-y-3 mt-4">
+              <div className={`p-3 rounded-lg ${getIconBgColor()} border ${getBorderColor()}`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertTriangle className="w-3.5 h-3.5 text-orange-400" />
+                  <span className="text-xs font-semibold text-orange-400">Detected Barriers</span>
+                </div>
+                <ul className="space-y-1">
+                  {currentReport.barriers.map((barrier, i) => (
+                    <li key={i} className="text-xs text-muted-foreground flex items-center gap-2">
+                      <span className="w-1 h-1 rounded-full bg-orange-400/60" />
+                      {barrier}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className={`p-3 rounded-lg ${getIconBgColor()} border ${getBorderColor()}`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <Wrench className="w-3.5 h-3.5 text-green-400" />
+                  <span className="text-xs font-semibold text-green-400">Applied Fixes</span>
+                </div>
+                <ul className="space-y-1">
+                  {currentReport.fixes.map((fix, i) => (
+                    <li key={i} className="text-xs text-muted-foreground flex items-center gap-2">
+                      <CheckCircle className="w-3 h-3 text-green-400/60" />
+                      {fix}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Enforcement Active Indicator */}
         {isEnforcing && (
-          <div className="mt-6 pt-4 border-t border-border/30">
+          <div className="mt-4 pt-3 border-t border-border/30">
             <div className="flex items-center gap-2 text-sm">
               <CheckCircle className={`w-4 h-4 ${selectedProfile === "lowvision" ? "text-yellow-400" : "text-green-400"}`} />
               <span className={selectedProfile === "lowvision" ? "text-yellow-400" : "text-green-400"}>
@@ -183,7 +281,7 @@ export function StatusCard({ isEnforcing, glowClass, selectedProfile }: StatusCa
 
         {/* Idle State Hint */}
         {!isEnforcing && (
-          <div className="mt-6 pt-4 border-t border-border/30">
+          <div className="mt-4 pt-3 border-t border-border/30">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4" />
               <span>Click &quot;Enforce&quot; to activate</span>

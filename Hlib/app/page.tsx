@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { TopBar } from "@/components/top-bar"
 import { HeroSection } from "@/components/hero-section"
 import { StatusCard } from "@/components/status-card"
@@ -17,6 +17,12 @@ export default function Home() {
   const [selectedProfile, setSelectedProfile] = useState<AccessibilityProfile>("colorblind")
   const [isEnforcing, setIsEnforcing] = useState(false)
   const [clarifyContent, setClarifyContent] = useState(false)
+
+  const handleReset = useCallback(() => {
+    setSelectedProfile("colorblind")
+    setIsEnforcing(false)
+    setClarifyContent(false)
+  }, [])
 
   const getProfileClass = () => {
     return `profile-${selectedProfile}`
@@ -50,6 +56,7 @@ export default function Home() {
         clarifyContent={clarifyContent}
         onToggleClarify={() => setClarifyContent(!clarifyContent)}
         glowClass={getGlowClass()}
+        onReset={handleReset}
       />
 
       <div className="container mx-auto px-6 pt-8 pb-16 max-w-7xl">
@@ -58,6 +65,7 @@ export default function Home() {
             isEnforcing={isEnforcing}
             glowClass={getGlowClass()}
             selectedProfile={selectedProfile}
+            clarifyContent={clarifyContent}
           />
           <StatusCard
             isEnforcing={isEnforcing}
@@ -70,6 +78,7 @@ export default function Home() {
           isEnforcing={isEnforcing}
           glowClass={getGlowClass()}
           selectedProfile={selectedProfile}
+          clarifyContent={clarifyContent}
         />
       </div>
     </main>

@@ -7,6 +7,7 @@ interface FeatureCardsProps {
   isEnforcing: boolean
   glowClass: string
   selectedProfile: AccessibilityProfile
+  clarifyContent: boolean
 }
 
 const features = [
@@ -14,23 +15,26 @@ const features = [
     icon: Eye,
     title: "Visual Enforcement",
     description: "Automatically adjusts contrast, sizing, and color schemes to meet WCAG guidelines in real-time.",
+    simplifiedDescription: "Makes colors and text easier to see by adjusting contrast and sizes automatically.",
     label: "CONTENT BOX",
   },
   {
     icon: MessageSquare,
     title: "Aura Narrative",
     description: "AI-powered screen reader integration that provides context-aware descriptions and navigation cues.",
+    simplifiedDescription: "Reads out what is on the screen and helps users navigate with voice guidance.",
     label: "STRUCTURE",
   },
   {
     icon: Brain,
     title: "Vision Core",
     description: "Deep learning engine that understands UI semantics and predicts accessibility barriers before they occur.",
+    simplifiedDescription: "Smart system that finds problems before they happen and suggests fixes.",
     label: "SEMANTIC",
   },
 ]
 
-export function FeatureCards({ isEnforcing, glowClass, selectedProfile }: FeatureCardsProps) {
+export function FeatureCards({ isEnforcing, glowClass, selectedProfile, clarifyContent }: FeatureCardsProps) {
   const getBorderColor = () => {
     if (!isEnforcing) return "border-border/30"
     switch (selectedProfile) {
@@ -126,7 +130,10 @@ export function FeatureCards({ isEnforcing, glowClass, selectedProfile }: Featur
           Universal Empowerment
         </h2>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-          Across the web, legacy apps, and everything in between.
+          {clarifyContent 
+            ? "Works everywhere: websites, apps, and older software too."
+            : "Across the web, legacy apps, and everything in between."
+          }
         </p>
       </div>
 
@@ -147,7 +154,7 @@ export function FeatureCards({ isEnforcing, glowClass, selectedProfile }: Featur
               {feature.title}
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              {feature.description}
+              {clarifyContent ? feature.simplifiedDescription : feature.description}
             </p>
 
             {/* Motor Difficulty Target Indicator */}
